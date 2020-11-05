@@ -6,6 +6,7 @@ class TextParser:
   def __init__(self,text,text_name="no_name"):
     self.text = text
     self.text_name = text_name
+    self.__clean_status = False
 
   def set_name(self,text_name):
     self.text_name = text_name
