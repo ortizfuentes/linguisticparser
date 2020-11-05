@@ -8,6 +8,8 @@ Text parser that segments into paragraphs, orthographic sentences and words. Not
 
 ## Importing
 
+```
 import linguisticparser
 mytext = 'I am a text example. This is a sentence. This is other sentence.'
 tp = textparser.TextParser(mytext, text_name='example')
+```
