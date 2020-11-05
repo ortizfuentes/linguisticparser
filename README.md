@@ -4,7 +4,9 @@ Text parser that segments into paragraphs, orthographic sentences and words. Not
 
 ## Installing
 
-!pip install git+https://github.com/ortizfuentes/linguisticparser
+```
+pip install git+https://github.com/ortizfuentes/linguisticparser
+```
 
 ## Importing
 
