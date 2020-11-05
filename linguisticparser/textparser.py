@@ -273,24 +273,24 @@ class TextParser:
         if splitby == 'growing_wordings_tokenize':
           num_sentence += 1
           wordings = TextParser.growing_wordings_tokenize(sentence)
-          num_wording = 0
+          num_subsentence = 0
           for wording in wordings:
-            num_wording += 1
-            information.append([self.text_name, num_paragraph, num_sentence, num_wording, wording])
+            num_subsentence += 1
+            information.append([self.text_name, num_paragraph, num_sentence, num_subsentence, wording])
         elif splitby == 'double_growing_wordings_tokenize':
           num_sentence += 1
           wordings = TextParser.double_growing_wordings_tokenize(sentence)
-          num_wording = 0
+          num_subsentence = 0
           for wording in wordings:
-            num_wording += 1
-            information.append([self.text_name, num_paragraph, num_sentence, num_wording, wording])
+            num_subsentence += 1
+            information.append([self.text_name, num_paragraph, num_sentence, num_subsentence, wording])
         elif splitby == 'sentence_tokenize':
           num_sentence += 1
           wording = sentence
-          num_wording = 1
-          information.append([self.text_name, num_paragraph, num_sentence, num_wording, wording])
+          num_subsentence = 1
+          information.append([self.text_name, num_paragraph, num_sentence, num_subsentence, wording])
 
-    df = pd.DataFrame(information,columns=["text_name", "num_paragraph", "num_sentence", "num_wording", "wordings"])
+    df = pd.DataFrame(information,columns=["text_name", "num_paragraph", "num_sentence", "num_subsentence", "wordings"])
     return df
 
   def folder2df_tokenize(folder_input, folder_output, splitby='sentence_tokenize'):
