@@ -170,7 +170,7 @@ class TextParser:
       #Elimina el punto después de signo de interrogaciòn
       sentences_list[i] = sentences_list[i].replace("?.", "?")
       sentences_list[i] = sentences_list[i].replace(":.", ":")
-      sentences_list[i] = sentences_list[i].replace("!.", ":")
+      sentences_list[i] = sentences_list[i].replace("!.", "!")
 
       #Elimina caracteres raros
       sentences_list[i] = sentences_list[i].replace(r"\ufeff", "")
