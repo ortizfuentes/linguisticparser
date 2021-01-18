@@ -2,11 +2,12 @@ import re
 import pandas as pd
 import os
 
-class TextParser:
+class LinguisticParser:
   def __init__(self,text,text_name="no_name"):
     self.text = text
     self.text_name = text_name
-    self.__clean_status = False
+#    self.__clean_status = False
+ #   self.paragraphs = LinguisticParser.paragraphs_tokenize(self.text)
 
   def set_name(self,text_name):
     self.text_name = text_name
@@ -52,13 +53,13 @@ class TextParser:
     This function receives a text and removes repetitions of spaces and some signs.
     '''
     new_text = mytext
-    new_text = TextParser.__erase_bullets(new_text)
-    new_text = TextParser.__erase_tabs(new_text)
-    new_text = TextParser.__erase_multiple_spaces(new_text)
-    new_text = TextParser.__erase_multiple_linebreaks(new_text)
-    new_text = TextParser.__point_in_linebreak(new_text)
-    new_text = TextParser.__erase_incorrect_linebreaks(new_text)
-    new_text = TextParser.__erase_double_hyphen(new_text)
+    new_text = LinguisticParser.__erase_bullets(new_text)
+    new_text = LinguisticParser.__erase_tabs(new_text)
+    new_text = LinguisticParser.__erase_multiple_spaces(new_text)
+    new_text = LinguisticParser.__erase_multiple_linebreaks(new_text)
+    new_text = LinguisticParser.__point_in_linebreak(new_text)
+    new_text = LinguisticParser.__erase_incorrect_linebreaks(new_text)
+    new_text = LinguisticParser.__erase_double_hyphen(new_text)
     return new_text
 
 
@@ -135,7 +136,7 @@ class TextParser:
     
 
     #Busca las abreviaturas y las sustituye por un string de letras
-    abb = TextParser.find_abbreviations(txt_coded)
+    abb = LinguisticParser.find_abbreviations(txt_coded)
     txt_coded = abb['txt']
     sentences_list = txt_coded.split(".")
     if sentences_list[-1] == "" or sentences_list[-1] == "." or sentences_list[-1] == " ":
@@ -174,8 +175,14 @@ class TextParser:
 
       #Elimina caracteres raros
       sentences_list[i] = sentences_list[i].replace(r"\ufeff", "")
+    
+    final_sentences_list = []
+    for s in sentences_list:
+      if s != " " and s != "." and s != ". ":
+        final_sentences_list.append(s)
 
-    return sentences_list
+
+    return final_sentences_list
 
   def word_tokenize(sentence):
     '''
@@ -183,7 +190,7 @@ class TextParser:
     and punctuation. It correctly separates abbreviations and acronyms.
     '''
 
-    abb = TextParser.find_abbreviations(sentence)
+    abb = LinguisticParser.find_abbreviations(sentence)
     new_sentence = abb['txt']
     word_list = new_sentence.split()
     for i in range(len(word_list)):    
@@ -215,7 +222,7 @@ class TextParser:
     spaces and returns a list with word strings ordered from fewer to more 
     words. 
     '''
-    words_list = TextParser.word_tokenize(sentence) 
+    words_list = LinguisticParser.word_tokenize(sentence) 
     combinations = []
     words_joined = ""
     for word in words_list:
@@ -242,7 +249,7 @@ class TextParser:
     return combinations
 
   def c_clean_text(self):
-    self.text = TextParser.clean_text(self.text)
+    self.text = LinguisticParser.clean_text(self.text)
     self.__clean_status = True
     return self.text
 
@@ -262,35 +269,35 @@ class TextParser:
       self.c_clean_text()
 
 
-    paragraphs = TextParser.paragraphs_tokenize(self.text)
+    paragraphs = LinguisticParser.paragraphs_tokenize(self.text)
     information =[]
     num_paragraph = 0
     for paragraph in paragraphs:
       num_paragraph += 1
-      sentences = TextParser.sentence_tokenize(paragraph)
+      sentences = LinguisticParser.sentence_tokenize(paragraph)
       num_sentence= 0
       for sentence in sentences:
         if splitby == 'growing_wordings_tokenize':
           num_sentence += 1
-          wordings = TextParser.growing_wordings_tokenize(sentence)
-          num_subsentence = 0
+          wordings = LinguisticParser.growing_wordings_tokenize(sentence)
+          num_wording = 0
           for wording in wordings:
-            num_subsentence += 1
-            information.append([self.text_name, num_paragraph, num_sentence, num_subsentence, wording])
+            num_wording += 1
+            information.append([self.text_name, num_paragraph, num_sentence, num_wording, wording])
         elif splitby == 'double_growing_wordings_tokenize':
           num_sentence += 1
-          wordings = TextParser.double_growing_wordings_tokenize(sentence)
-          num_subsentence = 0
+          wordings = LinguisticParser.double_growing_wordings_tokenize(sentence)
+          num_wording = 0
           for wording in wordings:
-            num_subsentence += 1
-            information.append([self.text_name, num_paragraph, num_sentence, num_subsentence, wording])
+            num_wording += 1
+            information.append([self.text_name, num_paragraph, num_sentence, num_wording, wording])
         elif splitby == 'sentence_tokenize':
           num_sentence += 1
           wording = sentence
-          num_subsentence = 1
-          information.append([self.text_name, num_paragraph, num_sentence, num_subsentence, wording])
+          num_wording = 1
+          information.append([self.text_name, num_paragraph, num_sentence, num_wording, wording])
 
-    df = pd.DataFrame(information,columns=["text_name", "num_paragraph", "num_sentence", "num_subsentence", "wordings"])
+    df = pd.DataFrame(information,columns=["text_name", "num_paragraph", "num_sentence", "num_wording", "wordings"])
     return df
 
   def folder2df_tokenize(folder_input, folder_output, splitby='sentence_tokenize'):
@@ -307,7 +314,7 @@ class TextParser:
         file = open(folder+n_file,'r', encoding='UTF-8', errors='ignore')
         mytext = file.read()
         file.close()
-        tlp = TextParser(mytext, text_name=n_file[:-4])
+        tlp = LinguisticParser(mytext, text_name=n_file[:-4])
         txtdf = tlp.text2df_tokenize(splitby=splitby)
         txtdf.to_excel(folder_output + n_file[:-4]+ ".xlsx", sheet_name='text', index=False) 
     print("¡Listo!")
