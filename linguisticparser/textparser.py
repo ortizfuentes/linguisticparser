@@ -2,7 +2,7 @@ import re
 import pandas as pd
 import os
 
-class TextParser:
+class LinguisticParser:
   def __init__(self,text,text_name="no_name"):
     self.text = text
     self.text_name = text_name
